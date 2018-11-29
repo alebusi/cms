@@ -1,168 +1,76 @@
-<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Creating SVG Elements from Data</title>
-		<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
-		<!-- <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> -->
-		<style type="text/css">
-			
-			body {
-				background-color: white;
-				font-family: Verdana;
-			}
 
-			svg {
-				background-color: white;
-			}
+<head>
+	<meta charset="utf-8">
+	<title>D3 Demo: 5-div bar chart</title>
+	
+	<script type="text/javascript" src="d3.min.js">
+	</script>
+	
+	<style type="text/css">
 
-			rect {
-				fill: rgb(60, 161, 189);
+		
+			div.bar {
+				display: inline-block;
+				width: 20px;
+				height: 75px;	/* Gets overriden by D3-assigned height below */
+				margin-right: 2px;
+				background-color: teal;
 			}
-
-			rect:hover { 
-				fill: rgb(33, 93, 109);
-			}
-
-			text {
-				fill: black;
-			}
-
-			.axis path,
-			.axis line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 11px;
-			}
-
-			.y.axis path,
-			.y.axis line {
-				opacity: 0;
-			}
-
-			.d3-tip {
-				line-height: 1;
-				font-weight: bold;
-				padding: 12px;
-				background: rgba(0, 0, 0, 0.8);
-				color: #fff;
-				border-radius: 2px;
-			}
-
+		
 		</style>
-	</head>
-	<body>
+</head>
 
-		<h2>Korean girls know how to count up</h2>
-		<p>This dataset gives an insight about the mathematics skills of girls across 37 OECD countries.</p>
+<body>
+		<script type="text/javascript">
+			var dataset = [5, 10, 13, 19, 21, 25, 22, 18, 15, 13, 11, 12, 15, 20, 18, 17, 16, 18, 23, 25];
 
-		<script type="text/javascript">	
+	//Width and Height
+	var w = 500;
+	var h = 100;
+	var barPadding = 2;
 
-			var w = 350
-			var h = 550
-
-			var padding = [ 20, 10, 20, 120 ];  //Top, right, bottom, left
-
-
-			var widthScale = d3.scale.linear()
-							.range ([ 0, w - padding[1] - padding[3] ]);
-
-			var heightScale = d3.scale.ordinal()
-							.rangeBands([0, h - padding[0] - padding [2]]);
-
-			var xAxis = d3.svg.axis()
-							.scale(widthScale)
-							.orient("bottom")
-							.ticks(5);
-
-			var yAxis = d3.svg.axis()
-							.scale(heightScale)
-							.orient("left")
-
-			/*var tip = d3.tip()
-							.attr('class', 'd3-tip')
-							.offset([-10, 0])
-							.html(function(d) {
-							return "<strong>Points:</strong> <span style='color:red'>" + d.mathGirls + "</span>";
-							}) */
-
-			var svg = d3.select("body")
-						.append("svg")
-						.attr("width", w)
-						.attr("height", h);
-
-			/*svg.call(tip);*/
-
-
-			d3.csv("OECD_ISA_2012.csv", function(data) {
-
-				data.sort(function(a,b){
-					return d3.descending (a.mathGirls, b.mathGirls);
+	//Create Svg element
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+			
+			svg.selectAll("rect")
+				.data(dataset)
+				.enter()
+				.append("rect")
+				.attr("x", function(d, i) {
+					return i*(w/dataset.length); //larghezza svg / numero colonne
 				})
+				.attr("y", function(d) {
+					return h - (d * 4); //altezza svg - dato
+				})
+				.attr("width", w / dataset.length - barPadding)
+				.attr("height", function(d) {
+					return d * 4; //quattro volte
+				});
 
-				widthScale.domain([ 0, d3.max(data, function(d) {
-					return +d.mathGirls;
-				}) ]);
+			svg.selectAll("text")
+				.data(dataset)
+				.enter()
+				.append("text")
+				.text(function(d) {
+					return d;
+				})
+				.attr("x", function(d, i) {
+					return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2; //posizione del testo, metà colonna
+				})
+				.attr("y", function(d) {
+					return h - (d * 4) + 14; //altezza svg - dato
+				})
+				.attr("text-anchor", "middle")
+				.attr("font-size", "12px")
+				.attr("font-family", "sans-serif")
+				.attr("fill", "white");
 
-				heightScale.domain(data.map(function(d) {return d.country; }));
+			
+			</script>
 
-			var rects = svg.selectAll("rect")
-					.data(data)
-					.enter()
-					.append("rect")
-
-
-				rects.attr("x", padding[3])
-					.attr("y", function(d, i){
-						return i * heightScale.rangeBand();
-					})
-					.attr("width", function(d){
-						return widthScale(d.mathGirls);
-					})
-					.attr("height", function(d){
-						return heightScale.rangeBand()*0.9;
-					})
-					.on('mouseover', tip.show)
-					.on('mouseout', tip.hide)
-					// .append("title")
-					// .text(function(d){
-					// 	return "Girls from "+d.country+" scored "+d.mathGirls+" points in mathematics"
-					// });
-
-			// var labels = svg.selectAll("text")
-			// 		.data(data)
-			// 		.enter()
-			// 		.append("text")
-
-			// 	labels.attr("x", 10)
-			// 		.attr("y", function(d, i){
-			// 			return i * heightScale.rangeBand()+heightScale.rangeBand()*0.7;
-			// 		})
-			// 		.attr("font-size", function(d){
-			// 			return heightScale.rangeBand()*0.7;
-			// 		})
-			// 		.text(function(d){
-			// 			return d.country;
-			// 		})
-
-			svg.append("g")
-				.attr("class", "x axis") //Assign "x axis" class
-				.attr("transform", "translate(" + (padding[3]) + ", " + (h - padding[2]) + ")")
-				.call(xAxis);
-
-			svg.append("g")
-				.attr("class", "y axis") //Assign "y axis" class
-				.attr("transform", "translate(" + (padding[3]) + ", 0)")
-				.call(yAxis);
-			});
-
-
-		</script>
-
-	</body>
+</body>
 </html>
