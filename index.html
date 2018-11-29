@@ -84,19 +84,19 @@
 							.scale(heightScale)
 							.orient("left")
 
-			var tip = d3.tip()
+			/*var tip = d3.tip()
 							.attr('class', 'd3-tip')
 							.offset([-10, 0])
 							.html(function(d) {
 							return "<strong>Points:</strong> <span style='color:red'>" + d.mathGirls + "</span>";
-							})
+							}) */
 
 			var svg = d3.select("body")
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
 
-			svg.call(tip);
+			/*svg.call(tip);*/
 
 
 			d3.csv("OECD_ISA_2012.csv", function(data) {
