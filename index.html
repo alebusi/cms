@@ -40,15 +40,17 @@
 				.data(data)
 				.enter()
 				.append("rect")
-				.attr("x", function(d, i) {
-					return i*(w/10); //larghezza svg / numero colonne
+				.attr("x", function(d) {
+					return x(d.giornata);
 				})
 				.attr("y", function(d) {
 					return h - (d * 4); //altezza svg - dato
 				})
-				.attr("width", w / 10 - barPadding)
+				.attr("width", function(d){
+						return widthScale(d.punti);
+				})
 				.attr("height", function(d) {
-					return d * 4; //quattro volte
+					return 10; //quattro volte
 				});
 
 			svg.selectAll("text")
