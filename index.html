@@ -34,7 +34,7 @@
 				.attr("width", w)
 				.attr("height", h);
 			
-			d3.csv("Punti.csv", function(data));
+			d3.csv("Punti.csv", function(dataset) {
 			       
 			svg.selectAll("rect")
 				.data(dataset)
@@ -69,7 +69,7 @@
 				.attr("font-family", "sans-serif")
 				.attr("fill", "white");
 
-			
+			})
 			</script>
 
 </body>
