@@ -45,19 +45,18 @@
 				.data(data)
 				.enter()
 				.append("rect")
-				.attr("x", function(d) {
-					return x(d.Giornata);
+				.attr("x", function(d,i) {
+					return i*(w/10);
 				})
 				.attr("y", function(d) {
-					return h - (d * 4); //altezza svg - dato
+					return h - (d.Punti * 4); //altezza svg - dato
 				})
-				.attr("width", function(d){
-						return widthScale(d.Punti);
+				.attr("width", w / 10 - barPadding)
 				})
 				.attr("height", function(d) {
-					return 10; //quattro volte
+					return d.Punti * 4; //quattro volte
 				});
-
+                  /*
 			svg.selectAll("text")
 				.data(data)
 				.enter()
