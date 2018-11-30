@@ -39,7 +39,7 @@
                            d.Punti = +d.Punti;
                            });
                            console.log(data[0]);
-                        });
+                        
 			    
 			svg.selectAll("rect")
 				.data(data)
@@ -55,6 +55,7 @@
 				.attr("height", function(d) {
 					return d.Punti * 4; //quattro volte
 				});
+			});
                   /*
 			svg.selectAll("text")
 				.data(data)
