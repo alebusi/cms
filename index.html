@@ -35,19 +35,24 @@
 				.attr("height", h);
 			
 			d3.csv("Punti.csv", function(data) {
-			       
+                           data.forEach(function(d) {
+                           d.Punti = +d.Punti;
+                           });
+                           console.log(data[0]);
+                        });
+			/*       
 			svg.selectAll("rect")
 				.data(data)
 				.enter()
 				.append("rect")
 				.attr("x", function(d) {
-					return x(d.giornata);
+					return x(d.Giornata);
 				})
 				.attr("y", function(d) {
 					return h - (d * 4); //altezza svg - dato
 				})
 				.attr("width", function(d){
-						return widthScale(d.punti);
+						return widthScale(d.Punti);
 				})
 				.attr("height", function(d) {
 					return 10; //quattro volte
@@ -71,7 +76,7 @@
 				.attr("font-family", "sans-serif")
 				.attr("fill", "white");
 
-			});
+			});*/
 			</script>
 
 </body>
